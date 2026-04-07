@@ -1,0 +1,16 @@
+// const express = require( 'express' );
+import { getSurahs, getAyahsBySurah, getParas, getAyahsByPara, getParaByPage, getSurahByPage } from '../controllers/quranController.js';
+import express from 'express';
+// const { getSurahs, getAyahsBySurah, getParas, getAyahsByPara } = require( '../controllers/quranController' );
+const router = express.Router();
+
+router.get( '/surahs', getSurahs );
+router.get( '/surahs/:suraIndex', getAyahsBySurah );
+router.get( '/paras', getParas );
+router.get( '/paras/:paraNo', getAyahsByPara );
+
+
+router.get( "/paras/:paraNo/:page", getParaByPage );
+
+router.get( "/surah/:surahNo/:page", getSurahByPage );
+export default router;
