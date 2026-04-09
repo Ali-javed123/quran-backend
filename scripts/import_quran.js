@@ -17,7 +17,7 @@ const importData = async () => {
 
     try {
         await connectDB();
-        const data = JSON.parse( fs.readFileSync( path.join( __dirname, '../data/simple-quran.json' ), 'utf-8' ) );
+        const data = JSON.parse( fs.readFileSync( path.join( __dirname, '../data/tajweed-quran.json' ), 'utf-8' ) );
         await Ayah.deleteMany(); // clear old
         await Ayah.insertMany( data );
         console.log( `✅ Imported ${data.length} ayahs` );
