@@ -41,7 +41,15 @@ import errorHandler from './middleware/errorHandler.js';
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+// connectDB();
+let isConnected = false;
+const initDB = async () => {
+  if ( !isConnected ) {
+    await connectDB();
+    isConnected = true;
+  }
+};
+
 
 // Security & middleware
 app.use( helmet() );
@@ -54,6 +62,11 @@ const limiter = rateLimit( {
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP'
 } );
+app.use( async ( req, res, next ) => {
+  await initDB();
+  next();
+} );
+
 app.use( '/api/verify', limiter );
 
 // Routes
@@ -66,5 +79,6 @@ app.get( '/health', ( req, res ) => res.send( 'OK' ) );
 // Error handler (last)
 app.use( errorHandler );
 
-const PORT = process.env.PORT || 5000;
-app.listen( PORT, () => console.log( `🚀 Server running on port ${PORT}` ) );
+// const PORT = process.env.PORT || 5000;
+// app.listen( PORT, () => console.log( `🚀 Server running on port ${PORT}` ) );
+export default app;
