@@ -74,7 +74,7 @@ app.get( '/health', ( req, res ) => res.send( 'OK' ) );
 
 // Error handler (last)
 app.get( '/', ( req, res ) => {
-  res.send( 'Welcome to the Quran API!' );
+  res.send( 'Welcome to the Quran API!..' );
 } );
 app.use( errorHandler );
 // const PORT = process.env.PORT || 5000;
