@@ -47,7 +47,16 @@ connectDB();
 
 // Security & middleware
 app.use( helmet() );
-app.use( cors() );
+// app.use( cors() );
+app.use( cors( {
+  origin: [
+    "http://localhost:3000",
+    "https://quran-frontend-app.vercel.app"
+  ],
+  methods: [ "GET", "POST", "PUT", "DELETE" ],
+  credentials: true
+} ) );
+
 app.use( express.json( { limit: '10mb' } ) );
 
 // Rate limiting (prevent abuse)
@@ -57,7 +66,17 @@ const limiter = rateLimit( {
   message: 'Too many requests from this IP'
 } );
 
+app.use( ( req, res, next ) => {
+  res.header( "Access-Control-Allow-Origin", "*" );
+  res.header( "Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS" );
+  res.header( "Access-Control-Allow-Headers", "Content-Type, Authorization" );
 
+  if ( req.method === "OPTIONS" ) {
+    return res.sendStatus( 200 );
+  }
+
+  next();
+} );
 app.use( '/api/verify', limiter );
 
 // Routes
