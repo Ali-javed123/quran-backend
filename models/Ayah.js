@@ -49,6 +49,10 @@ const ayahSchema = new mongoose.Schema( {
     endWaqf: endWaqfSchema,
     endWaqfIndex: Number
 } );
-
+ayahSchema.index({ suraIndex: 1, ayaIndex: 1 });
+ayahSchema.index({ para_no: 1, globalIndex: 1 });
+ayahSchema.index({ page_no: 1, globalIndex: 1 });
+ayahSchema.index({ suraIndex: 1, page_no: 1 });
+ayahSchema.index({ para_no: 1, page_no: 1 });
 // export default mongoose.model( 'Ayah', ayahSchema );
 export default mongoose.models.Ayah || mongoose.model( 'Ayah', ayahSchema );
