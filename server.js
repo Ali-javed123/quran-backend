@@ -1,26 +1,7 @@
-// import express from "express";
-// import mongoose from "mongoose";
-// import dotenv from "dotenv";
-// import cors from "cors";
-// import quranRoutes from "./routes/quran.js";
 
-// dotenv.config();
-// const app = express();
-
-// app.use(cors());
-// app.use(express.json()); 
-
-// app.use("/api/quran", quranRoutes);
-
-// mongoose.connect(process.env.MONGO_URI)
-//     .then(() => console.log("MongoDB Connected"))
-//     .catch(err => console.log(err));
-
-// app.listen(8484, () => console.log("Server running on port 8484"));
-
-// require( 'dotenv' ).config();
 import dotenv from "dotenv";
 dotenv.config();
+console.log( "ENV CHECK:", process.env.GROQ_API_KEY );
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -29,6 +10,7 @@ import connectDB from './config/db.js';
 import quranRoutes from './routes/quranRoutes.js';
 import verifyRoutes from './routes/verifyRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
+import { dbMiddleware } from "./middleware/db.middleware.js";
 // const express = require( 'express' );
 // const cors = require( 'cors' );
 // const helmet = require( 'helmet' );
@@ -39,7 +21,8 @@ import errorHandler from './middleware/errorHandler.js';
 // const errorHandler = require( './middleware/errorHandler' );
 
 const app = express();
-connectDB();
+app.use( dbMiddleware );
+// connectDB();
 
 // Connect to MongoDB
 // connectDB();
@@ -48,14 +31,14 @@ connectDB();
 // Security & middleware
 app.use( helmet() );
 // app.use( cors() );
-app.use( cors( {
-  origin: [
-    "http://localhost:3000",
-    "https://quran-frontend-app.vercel.app"
-  ],
-  methods: [ "GET", "POST", "PUT", "DELETE" ],
-  credentials: true
-} ) );
+// app.use( cors( {
+//   origin: [
+//     "http://localhost:3000",
+//     "https://quran-frontend-app.vercel.app"
+//   ],
+//   methods: [ "GET", "POST", "PUT", "DELETE" ],
+//   credentials: true
+// } ) );
 
 app.use( express.json( { limit: '10mb' } ) );
 

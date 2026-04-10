@@ -3,36 +3,35 @@ import Ayah from '../models/Ayah.js';
 
 
 
+// useful code
+// const getSurahs = async ( req, res ) => {
+//   try {
+//     const surahs = await Ayah.aggregate( [
+//       {
+//         $sort: { ayaIndex: 1 } // pehle ayaIndex ke hisaab se sort kar do
+//       },
+//       {
+//         $group: {
+//           _id: "$suraIndex",
+//           surah_name: { $first: "$surah_name" } // ab surah_name directly uthao
+//         }
+//       },
+//       { $sort: { _id: 1 } },
+//       {
+//         $project: {
+//           _id: 0,
+//           suraIndex: "$_id",
+//           surah_name: 1
+//         }
+//       }
+//     ] );
 
-const getSurahs = async ( req, res ) => {
-  try {
-    const surahs = await Ayah.aggregate( [
-      {
-        $sort: { ayaIndex: 1 } // pehle ayaIndex ke hisaab se sort kar do
-      },
-      {
-        $group: {
-          _id: "$suraIndex",
-          surah_name: { $first: "$surah_name" } // ab surah_name directly uthao
-        }
-      },
-      { $sort: { _id: 1 } },
-      {
-        $project: {
-          _id: 0,
-          suraIndex: "$_id",
-          surah_name: 1
-        }
-      }
-    ] );
-
-    res.json( surahs );
-  } catch ( err ) {
-    console.log( err );
-    res.status( 500 ).json( { error: "Failed to fetch surahs" } );
-  }
-};
-// Get all surahs (unique suraIndex with names)
+//     res.json( surahs );
+//   } catch ( err ) {
+//     console.log( err );
+//     res.status( 500 ).json( { error: "Failed to fetch surahs" } );
+//   }
+// };
 // Get ayahs for a specific surah with pagination (16 ayahs per page)
 // const getAyahsBySurah = async ( req, res ) => {
 //   const { suraIndex } = req.params;
@@ -92,63 +91,183 @@ const getSurahs = async ( req, res ) => {
 //     ayahs: data
 //   } );
 // };
-const getAyahsBySurah = async ( req, res ) => {
-  const { suraIndex } = req.params;
-  let { page = 1, limit = 16, mode = 'normal', all = false } = req.query;
-
-  page = parseInt( page );
-  limit = parseInt( limit );
-
-  const query = Ayah.find( { suraIndex: parseInt( suraIndex ) } ).sort( { ayaIndex: 1 } ).lean();
-
-  if ( !all ) {
-    const skip = ( page - 1 ) * limit;
-    query.skip( skip ).limit( limit );
-  }
-
-  const ayahs = await query;
-
-  const data = ayahs.map( ayah => ( {
-    ...ayah,
-    text: mode === 'tajweed' ? ayah.textTajweed : ayah.text
-  } ) );
-
-  res.json( {
-    suraIndex,
-    totalAyahs: ayahs.length,
-    ayahs: data
-  } );
-};
-
-// Get all paras (1-30)
-const getParas = async ( req, res ) => {
+const getSurahs = async ( req, res ) => {
   try {
-    const paras = await Ayah.aggregate( [
-      { $sort: { ayaIndex: 1 } }, // make sure ayahs are sorted within para
+    const surahs = await Ayah.aggregate( [
+      { $sort: { ayaIndex: 1 } },
       {
         $group: {
-          _id: "$para_no",              // group by para_no
-          surah_name: { $first: "$para_name" }, // take first surah_name in this para
-          ayahCount: { $sum: 1 }       // count of ayahs in this para
+          _id: "$suraIndex",
+          surah_name: { $first: "$surah_name" }
         }
       },
-      { $sort: { _id: 1 } },          // sort by para_no ascending
+      { $sort: { _id: 1 } },
       {
         $project: {
           _id: 0,
-          para_no: "$_id",
-          surah_name: 1,
-          ayahCount: 1
+          suraIndex: "$_id",
+          surah_name: 1
         }
       }
-    ] );
+    ] ).allowDiskUse( true );
 
-    res.json( paras );
+    res.json( surahs );
   } catch ( err ) {
-    console.error( err );
-    res.status( 500 ).json( { error: "Failed to fetch paras" } );
+    res.status( 500 ).json( { error: "Failed to fetch surahs" } );
   }
 };
+
+
+
+// const getAyahsBySurah = async ( req, res ) => {
+//   const { suraIndex } = req.params;
+//   let { page = 1, limit = 16, mode = 'normal', all = false } = req.query;
+
+//   page = parseInt( page );
+//   limit = parseInt( limit );
+
+//   const query = Ayah.find( { suraIndex: parseInt( suraIndex ) } ).sort( { ayaIndex: 1 } ).lean();
+
+//   if ( !all ) {
+//     const skip = ( page - 1 ) * limit;
+//     query.skip( skip ).limit( limit );
+//   }
+
+//   const ayahs = await query;
+
+//   const data = ayahs.map( ayah => ( {
+//     ...ayah,
+//     text: mode === 'tajweed' ? ayah.textTajweed : ayah.text
+//   } ) );
+
+//   res.json( {
+//     suraIndex,
+//     totalAyahs: ayahs.length,
+//     ayahs: data
+//   } );
+// };
+
+// Get all paras (1-30)
+// const getAyahsBySurah = async ( req, res ) => {
+//   try {
+//     const { suraIndex } = req.params;
+//     let { page = 1, limit = 16, mode = 'normal', all = false } = req.query;
+
+//     page = Number( page );
+//     limit = Number( limit );
+
+//     const query = Ayah.find(
+//       { suraIndex: Number( suraIndex ) },
+//       {
+//         suraIndex: 1,
+//         ayaIndex: 1,
+//         text: 1,
+//         textTajweed: 1,
+//         page_no: 1,
+//         para_no: 1,
+//         globalIndex: 1
+//       }
+//     )
+//       .sort( { ayaIndex: 1 } )
+//       .lean();
+
+//     if ( !all ) {
+//       query.skip( ( page - 1 ) * limit ).limit( limit );
+//     }
+
+//     const ayahs = await query;
+
+//     const data = ayahs.map( a => ( {
+//       ...a,
+//       text: mode === 'tajweed' ? a.textTajweed : a.text
+//     } ) );
+
+//     res.json( {
+//       suraIndex: Number( suraIndex ),
+//       page,
+//       ayahs
+//     } );
+
+//   } catch ( err ) {
+//     res.status( 500 ).json( { error: "Failed" } );
+//   }
+// };
+
+const getAyahsBySurah = async ( req, res ) => {
+  try {
+    const { suraIndex } = req.params;
+    let { page = 1, limit = 16, mode = 'normal', all = false } = req.query;
+
+    page = Number( page );
+    limit = Number( limit );
+
+    const query = Ayah.find(
+      { suraIndex: Number( suraIndex ) },
+      {
+        suraIndex: 1,
+        ayaIndex: 1,
+        text: 1,
+        textTajweed: 1,
+        page_no: 1,
+        para_no: 1,
+        globalIndex: 1
+      }
+    )
+      .sort( { ayaIndex: 1 } )
+      .lean();
+
+    if ( !all ) {
+      query.skip( ( page - 1 ) * limit ).limit( limit );
+    }
+
+    const ayahs = await query;
+
+    const data = ayahs.map( a => ( {
+      ...a,
+      text: mode === 'tajweed' ? a.textTajweed : a.text
+    } ) );
+
+    res.json( {
+      suraIndex: Number( suraIndex ),
+      page,
+      ayahs
+    } );
+
+  } catch ( err ) {
+    res.status( 500 ).json( { error: "Failed" } );
+  }
+};
+
+
+
+// const getParas = async ( req, res ) => {
+//   try {
+//     const paras = await Ayah.aggregate( [
+//       { $sort: { ayaIndex: 1 } }, // make sure ayahs are sorted within para
+//       {
+//         $group: {
+//           _id: "$para_no",              // group by para_no
+//           surah_name: { $first: "$para_name" }, // take first surah_name in this para
+//           ayahCount: { $sum: 1 }       // count of ayahs in this para
+//         }
+//       },
+//       { $sort: { _id: 1 } },          // sort by para_no ascending
+//       {
+//         $project: {
+//           _id: 0,
+//           para_no: "$_id",
+//           surah_name: 1,
+//           ayahCount: 1
+//         }
+//       }
+//     ] );
+
+//     res.json( paras );
+//   } catch ( err ) {
+//     console.error( err );
+//     res.status( 500 ).json( { error: "Failed to fetch paras" } );
+//   }
+// };
 // Get ayahs by para number with pagination
 // const getAyahsByPara = async ( req, res ) => {
 //     const { paraNo } = req.params;
@@ -179,47 +298,119 @@ const getParas = async ( req, res ) => {
 //         ayahs: data,
 //     } );
 // };
+const getParas = async ( req, res ) => {
+  try {
+    const paras = await Ayah.aggregate( [
+      { $sort: { globalIndex: 1 } },
+      {
+        $group: {
+          _id: "$para_no",
+          para_name: { $first: "$para_name" },
+          ayahCount: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } },
+      {
+        $project: {
+          _id: 0,
+          para_no: "$_id",
+          para_name: 1,
+          ayahCount: 1
+        }
+      }
+    ] );
 
+    res.json( paras );
+  } catch ( err ) {
+    res.status( 500 ).json( { error: "Failed" } );
+  }
+};
+
+
+// const getAyahsByPara = async ( req, res ) => {
+//   try {
+//     const { paraNo } = req.params;
+//     let { page = 1, limit = 16, mode = 'normal' } = req.query;
+
+//     page = parseInt( page );
+//     limit = parseInt( limit );
+
+//     const skip = ( page - 1 ) * limit;
+
+//     const allAyahs = await Ayah.find( {
+//       para_no: parseInt( paraNo ),
+//     } )
+//       .sort( { globalIndex: 1 } )
+//       .lean();
+
+//     const total = allAyahs.length;
+
+//     const paginatedAyahs = allAyahs.slice( skip, skip + limit );
+
+//     const ayahs = paginatedAyahs.map( ( ayah ) => {
+//       return {
+//         ...ayah, // 👈 pura object aa jayega
+//         text: mode === 'tajweed' ? ayah.textTajweed : ayah.text,
+//       };
+//     } );
+
+//     res.json( {
+//       paraNo: Number( paraNo ),
+//       page,
+//       totalPages: Math.ceil( total / limit ),
+//       ayahs,
+//     } );
+//   } catch ( error ) {
+//     console.error( error );
+//     res.status( 500 ).json( { message: "Server Error" } );
+//   }
+// };
 
 const getAyahsByPara = async ( req, res ) => {
   try {
     const { paraNo } = req.params;
     let { page = 1, limit = 16, mode = 'normal' } = req.query;
 
-    page = parseInt( page );
-    limit = parseInt( limit );
+    page = Number( page );
+    limit = Number( limit );
 
     const skip = ( page - 1 ) * limit;
 
-    const allAyahs = await Ayah.find( {
-      para_no: parseInt( paraNo ),
-    } )
+    const ayahs = await Ayah.find(
+      { para_no: Number( paraNo ) },
+      {
+        suraIndex: 1,
+        ayaIndex: 1,
+        text: 1,
+        textTajweed: 1,
+        page_no: 1,
+        para_no: 1,
+        globalIndex: 1
+      }
+    )
       .sort( { globalIndex: 1 } )
+      .skip( skip )
+      .limit( limit )
       .lean();
 
-    const total = allAyahs.length;
+    const total = await Ayah.countDocuments( { para_no: Number( paraNo ) } );
 
-    const paginatedAyahs = allAyahs.slice( skip, skip + limit );
-
-    const ayahs = paginatedAyahs.map( ( ayah ) => {
-      return {
-        ...ayah, // 👈 pura object aa jayega
-        text: mode === 'tajweed' ? ayah.textTajweed : ayah.text,
-      };
-    } );
+    const data = ayahs.map( a => ( {
+      ...a,
+      text: mode === 'tajweed' ? a.textTajweed : a.text
+    } ) );
 
     res.json( {
       paraNo: Number( paraNo ),
       page,
       totalPages: Math.ceil( total / limit ),
-      ayahs,
+      ayahs: data
     } );
-  } catch ( error ) {
-    console.error( error );
-    res.status( 500 ).json( { message: "Server Error" } );
+
+  } catch ( err ) {
+    res.status( 500 ).json( { error: "Server Error" } );
   }
 };
-
 
 
 
@@ -279,21 +470,38 @@ const getSurahByPage = async ( req, res ) => {
 const getSurahMeta = async ( req, res ) => {
   const { suraIndex } = req.params;
 
-  const firstAyah = await Ayah.findOne( { suraIndex: parseInt( suraIndex ) } )
-    .sort( { ayaIndex: 1 } )
-    .lean();
+  const firstAyah = await Ayah.findOne(
+    { suraIndex: Number( suraIndex ) },
+    { page_no: 1 }
+  ).sort( { ayaIndex: 1 } ).lean();
 
   res.json( {
-    suraIndex,
+    suraIndex: Number( suraIndex ),
     startPage: firstAyah?.page_no || 1
   } );
 };
+
+
+// const getParaMeta = async ( req, res ) => {
+//   const { para_no } = req.params;
+
+//   const firstAyah = await Ayah.findOne( { para_no: parseInt( para_no ) } )
+//     .sort( { globalIndex: 1 } ) // ya ayaIndex bhi use kar sakte ho
+//     .lean();
+
+//   res.json( {
+//     para_no: Number( para_no ),
+//     startPage: firstAyah?.page_no || 1,
+//     paraName: firstAyah?.para_name || ''
+//   } );
+// };
 const getParaMeta = async ( req, res ) => {
   const { para_no } = req.params;
 
-  const firstAyah = await Ayah.findOne( { para_no: parseInt( para_no ) } )
-    .sort( { globalIndex: 1 } ) // ya ayaIndex bhi use kar sakte ho
-    .lean();
+  const firstAyah = await Ayah.findOne(
+    { para_no: Number( para_no ) },
+    { page_no: 1, para_name: 1 }
+  ).sort( { globalIndex: 1 } ).lean();
 
   res.json( {
     para_no: Number( para_no ),
@@ -301,4 +509,5 @@ const getParaMeta = async ( req, res ) => {
     paraName: firstAyah?.para_name || ''
   } );
 };
+
 export { getSurahs, getAyahsBySurah, getParas, getAyahsByPara, getParaByPage, getSurahByPage, getSurahMeta, getParaMeta };
