@@ -3,7 +3,7 @@
 
 
 import fs from "fs";
-import fetch from "node-fetch";
+import fetch from "node-fetch"
 
 // ================= CONFIG =================
 const ALQURAN_CLOUD = "https://api.alquran.cloud/v1/quran/quran-uthmani";
