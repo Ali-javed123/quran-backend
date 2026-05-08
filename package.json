@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "description": "",
+    "engines": {
+    "node": "24.15.0"
+  },
   "dependencies": {
     "@upstash/redis": "^1.37.0",
     "audio-decode": "^3.9.0",
