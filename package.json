@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-    "engines": {
+  "engines": {
     "node": "20.20.0"
   },
   "dependencies": {
@@ -34,7 +34,6 @@
     "node-fetch": "^3.3.2",
     "recorder": "^0.0.1",
     "socket.io": "^4.8.3",
-
     "string-similarity-js": "^2.1.4",
     "vosk": "^0.3.39",
     "wave": "^0.2.3",
