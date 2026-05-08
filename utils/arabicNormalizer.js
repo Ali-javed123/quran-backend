@@ -552,4 +552,4 @@ export default {
   getNormalizedWords,
   hasWaqfMarker,
   removeWaqfMarkers
-};
+}
