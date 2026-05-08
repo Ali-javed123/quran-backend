@@ -43,6 +43,6 @@ export const compareAyah = (spoken, correct) => {
   return {
     accuracy,
     wrongWords,
-    isCorrect: accuracy >= 50,
+    isCorrect: accuracy >= 95,
   };
 };
