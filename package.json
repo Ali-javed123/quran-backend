@@ -1,0 +1,44 @@
+{
+  "name": "sds",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@upstash/redis": "^1.37.0",
+    "audio-decode": "^3.9.0",
+    "axios": "^1.14.0",
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
+    "fuse.js": "^7.3.0",
+    "groq-sdk": "^1.1.2",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.10.1",
+    "mic": "^2.1.2",
+    "mongoose": "^9.4.1",
+    "multer": "^2.1.1",
+    "natural": "^8.1.1",
+    "node-fetch": "^3.3.2",
+    "recorder": "^0.0.1",
+    "socket.io": "^4.8.3",
+    "string-similarity": "^4.0.4",
+    "string-similarity-js": "^2.1.4",
+    "vosk": "^0.3.39",
+    "wave": "^0.2.3",
+    "ws": "^8.20.0",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
