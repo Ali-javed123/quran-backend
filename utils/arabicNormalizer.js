@@ -267,7 +267,7 @@ export const wordSimilarityScore = (userWord, correctWord) => {
   }
   
   const percentage = maxLen > 0 ? Math.round((matches / maxLen) * 100) : 0;
-  if (percentage >= 85) return 100; // High similarity counts as correct for fast recitation
+  if (percentage >= 45) return 100; // High similarity counts as correct for fast recitation
   
   return percentage;
 };

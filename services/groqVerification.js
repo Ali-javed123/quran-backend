@@ -54,10 +54,10 @@ Output ONLY valid JSON.`;
     const algorithmicWrongWords = findWrongWords(spokenText, correctText);
     
     return {
-      match: result.match === true || algorithmicAccuracy >= 95,
+      match: result.match === true || algorithmicAccuracy >= 50,
       accuracy: result.accuracy || algorithmicAccuracy,
       correction: result.correction || correctText,
-      diff: result.diff || (algorithmicAccuracy < 100 ? "Some words need improvement" : ""),
+      diff: result.diff || (algorithmicAccuracy < 50 ? "Some words need improvement" : ""),
       wrongWords: result.wrongWords || algorithmicWrongWords
     };
   } catch (error) {
@@ -68,10 +68,10 @@ Output ONLY valid JSON.`;
     const wrongWords = findWrongWords(spokenText, correctText);
     
     return {
-      match: accuracy >= 95,
+      match: accuracy >= 50,
       accuracy: accuracy,
       correction: correctText,
-      diff: accuracy >= 95 ? "" : "Mismatch detected in recitation",
+      diff: accuracy >= 20 ? "" : "Mismatch detected in recitation",
       wrongWords: wrongWords
     };
   }
@@ -130,11 +130,11 @@ Provide feedback in JSON format:
     }));
     
     return {
-      overall: accuracy >= 90 ? "Excellent recitation!" : 
-               accuracy >= 70 ? "Good effort, keep practicing!" : 
+      overall: accuracy >= 35 ? "Excellent recitation!" : 
+               accuracy >= 30 ? "Good effort, keep practicing!" : 
                "Please review this ayah carefully.",
       mistakes: mistakes,
-      encouragement: accuracy >= 90 ? "Masha'Allah! Keep it up!" : 
+      encouragement: accuracy >= 40 ? "Masha'Allah! Keep it up!" : 
                      "You're making progress. Practice makes perfect!",
       score: accuracy
     };
