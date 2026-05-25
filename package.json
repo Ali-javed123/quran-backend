@@ -11,7 +11,6 @@
   "author": "",
   "license": "ISC",
   "description": "",
-
   "dependencies": {
     "@upstash/redis": "^1.37.0",
     "audio-decode": "^3.9.0",
@@ -32,8 +31,6 @@
     "node-fetch": "^3.3.2",
     "recorder": "^0.0.1",
     "socket.io": "^4.8.3",
-    "string-similarity": "^4.0.4",
-    "string-similarity-js": "^2.1.4",
     "wave": "^0.2.3",
     "ws": "^8.20.0",
     "xml2js": "^0.6.2"

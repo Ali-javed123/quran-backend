@@ -57,7 +57,7 @@ const getAdaptiveThreshold = (spokenText, correctText) => {
 };
 
 // =====================================================
-// TRANSCRIBE AUDIO TO ARABIC
+// TRANSCRIBE AUDIO TO ARABIC 
 // =====================================================
 
 const transcribeAudioToArabic = async (audioBuffer) => {
