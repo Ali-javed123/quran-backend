@@ -810,7 +810,7 @@ const processAudioChunk = async (socket, session, data) => {
     }
 
   } catch (err) {
-    console.error('❌ processAudioChunk error:', err.message);
+    console.error('❌ processAudioChunk errors:', err.message);
     socket.emit('recitation-error', { message: 'Audio processing failed: ' + err.message });
   } finally {
     session.processingAudio = false;

@@ -13,7 +13,7 @@ export const validateAudioFormat = (buffer) => {
   // Check RIFF header
   const isRIFF = buffer.toString('ascii', 0, 4) === 'RIFF';
   const isWAVE = buffer.toString('ascii', 8, 12) === 'WAVE';
-  
+  // ds
   return isRIFF && isWAVE;
 };
 
