@@ -262,5 +262,5 @@ app.use(errorHandler);
 // ─────────────────────────────────────────
 await connectDB(); // ⛔ WAIT HERE (main fix)
     server.listen(5000, "0.0.0.0", () => {
-      console.log(`🚀 Server running on port ${PORT}...=`);
+      console.log(`🚀 Server runnings on port ${PORT}...=`);
 });
